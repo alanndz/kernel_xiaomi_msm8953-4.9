@@ -817,7 +817,8 @@ static void __qpnp_lpg_calc_pwm_duty(u64 period_ns, u64 duty_ns,
 	u64 tmp;
 
 	tmp = (u64)duty_ns << pwm_config->pwm_size;
-	pwm_value = (u16)div64_u64(tmp, period_ns);
+	do_div(tmp, period_ns);
+	pwm_value = (u16)tmp;
 
 	max_pwm_value = (1 << pwm_config->pwm_size) - 1;
 	if (pwm_value > max_pwm_value)
@@ -1085,7 +1086,8 @@ static int qpnp_lpg_pwm_set_output_pattern(struct pwm_chip *pwm_chip,
 	struct qpnp_lpg_channel *lpg;
 	u64 period_ns, duty_ns, tmp;
 	u32 *percentages;
-	int rc = 0, i;
+	/*int rc = 0, i;*/
+	u64 tmp;
 
 	lpg = pwm_dev_to_qpnp_lpg(pwm_chip, pwm);
 	if (lpg == NULL) {
@@ -1115,7 +1117,8 @@ static int qpnp_lpg_pwm_set_output_pattern(struct pwm_chip *pwm_chip,
 		}
 		/* Translate the pattern in duty_ns to percentage */
 		tmp = (u64)duty_ns * 100;
-		percentages[i] = (u32)div64_u64(tmp, period_ns);
+		do_div(tmp, period_ns);
+		percentages[i] = (u32)tmp;
 	}
 
 	rc = qpnp_lpg_set_lut_pattern(lpg, percentages,
