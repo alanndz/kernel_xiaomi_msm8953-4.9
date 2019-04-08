@@ -815,6 +815,9 @@ endif
 
 KBUILD_CFLAGS   += $(call cc-option, -fno-var-tracking-assignments)
 
+# disable maybe-uninitialized warnings
+KBUILD_CFLAGS += $(call cc-disable-warning, maybe-uninitialized)
+
 ifdef CONFIG_DEBUG_INFO
 ifdef CONFIG_DEBUG_INFO_SPLIT
 KBUILD_CFLAGS   += $(call cc-option, -gsplit-dwarf, -g)
