@@ -622,8 +622,8 @@ void wake_oom_reaper(struct task_struct *tsk)
 	 */
 	spin_lock(&oom_reaper_lock);
 
-	/* tsk is already queued? */
-	if (tsk == oom_reaper_list || tsk->oom_reaper_list) {
+	/* mm is already queued? */
+	if (test_and_set_bit(MMF_OOM_REAP_QUEUED, &tsk->signal->oom_mm->flags)) {
 		spin_unlock(&oom_reaper_lock);
 		return;
 	}
@@ -676,6 +676,7 @@ static void __mark_oom_victim(struct task_struct *tsk)
  */
 static void mark_oom_victim(struct task_struct *tsk)
 {
+
 	WARN_ON(oom_killer_disabled);
 	/* OOM killer might race with memcg OOM */
 	if (test_and_set_tsk_thread_flag(tsk, TIF_MEMDIE))

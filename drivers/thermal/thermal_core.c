@@ -605,38 +605,34 @@ static void update_temperature(struct thermal_zone_device *tz)
 				 ret);
 		return;
 	}
-	store_temperature(tz, temp);
+	mutex_lock(&tz->lock);
+	tz->last_temperature = tz->temperature;
+	tz->temperature = temp;
+	mutex_unlock(&tz->lock);
+ 
+	trace_thermal_temperature(tz);
+	if (tz->last_temperature == THERMAL_TEMP_INVALID ||
+		tz->last_temperature == THERMAL_TEMP_INVALID_LOW)
+		dev_dbg(&tz->device, "last_temperature N/A, current_temperature=%d\n",
+			tz->temperature);
+	else
+		dev_dbg(&tz->device, "last_temperature=%d, current_temperature=%d\n",
+			tz->last_temperature, tz->temperature);
 }
 
-static void thermal_zone_device_reset(struct thermal_zone_device *tz)
+static void thermal_zone_device_init(struct thermal_zone_device *tz)
 {
 	struct thermal_instance *pos;
-
 	tz->temperature = THERMAL_TEMP_INVALID;
-	tz->passive = 0;
 	list_for_each_entry(pos, &tz->thermal_instances, tz_node)
 		pos->initialized = false;
 }
 
-void thermal_zone_device_update_temp(struct thermal_zone_device *tz,
-				enum thermal_notify_event event, int temp)
+static void thermal_zone_device_reset(struct thermal_zone_device *tz)
 {
-	int count;
-
-	if (atomic_read(&in_suspend))
-		return;
-
-	trace_thermal_device_update(tz, event);
-	store_temperature(tz, temp);
-
-	thermal_zone_set_trips(tz);
-
-	tz->notify_event = event;
-
-	for (count = 0; count < tz->trips; count++)
-		handle_thermal_trip(tz, count);
+	tz->passive = 0;
+	thermal_zone_device_init(tz);
 }
-EXPORT_SYMBOL(thermal_zone_device_update_temp);
 
 void thermal_zone_device_update(struct thermal_zone_device *tz,
 				enum thermal_notify_event event)
@@ -659,6 +655,26 @@ void thermal_zone_device_update(struct thermal_zone_device *tz,
 	for (count = 0; count < tz->trips; count++)
 		handle_thermal_trip(tz, count);
 }
+
+void thermal_zone_device_update_temp(struct thermal_zone_device *tz,
+				enum thermal_notify_event event, int temp)
+{
+	int count;
+
+	if (atomic_read(&in_suspend))
+		return;
+
+	trace_thermal_device_update(tz, event);
+	store_temperature(tz, temp);
+
+	thermal_zone_set_trips(tz);
+
+	tz->notify_event = event;
+
+	for (count = 0; count < tz->trips; count++)
+		handle_thermal_trip(tz, count);
+}
+
 EXPORT_SYMBOL_GPL(thermal_zone_device_update);
 
 static void thermal_zone_device_check(struct work_struct *work)
@@ -2615,7 +2631,7 @@ static int thermal_pm_notify(struct notifier_block *nb,
 	case PM_POST_SUSPEND:
 		atomic_set(&in_suspend, 0);
 		list_for_each_entry(tz, &thermal_tz_list, node) {
-			thermal_zone_device_reset(tz);
+			thermal_zone_device_init(tz);
 			thermal_zone_device_update(tz,
 						   THERMAL_EVENT_UNSPECIFIED);
 		}
