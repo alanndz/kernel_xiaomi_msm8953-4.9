@@ -140,7 +140,7 @@ static struct pll_clk apcs_hf_pll = {
 		.dbg_name = "apcs_hf_pll",
 		.ops = &clk_ops_variable_rate,
 		/* MX level of MSM is much higher than of PLL */
-		VDD_MX_HF_FMAX_MAP1(SVS, 2400000000UL),
+		VDD_MX_HF_FMAX_MAP1(SVS, 2495000000UL),
 		CLK_INIT(apcs_hf_pll.c),
 	},
 };
