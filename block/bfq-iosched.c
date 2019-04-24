@@ -4887,10 +4887,7 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
 	bfqd->bfq_back_max = bfq_back_max;
 	bfqd->bfq_back_penalty = bfq_back_penalty;
 	bfqd->bfq_slice_idle = blk_queue_nonrot(q) ? 0 : bfq_slice_idle;
-	bfqd->bfq_class_idle_last_service = 0;
-	bfqd->bfq_max_budget_async_rq = bfq_max_budget_async_rq;
-	bfqd->bfq_timeout[BLK_RW_ASYNC] = bfq_timeout_async;
-	bfqd->bfq_timeout[BLK_RW_SYNC] = bfq_timeout_sync;
+	bfqd->bfq_timeout = bfq_timeout;
 
 	bfqd->bfq_requests_within_timer = 120;
 
