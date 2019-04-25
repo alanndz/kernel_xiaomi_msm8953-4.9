@@ -19,6 +19,8 @@
 #include <dt-bindings/clock/msm-clocks-8953.h>
 #include <dt-bindings/msm/msm-bus-ids.h>
 
+#define MHZ_TO_MBPS(mhz, w) ((mhz * 1000000 * w) / (1024 * 1024))
+
 / {
 	model = "Qualcomm Technologies, Inc. MSM8953";
 	compatible = "qcom,msm8953";
@@ -1039,17 +1041,17 @@
 		qcom,src-dst-ports = <1 512>;
 		qcom,active-only;
 		qcom,bw-tbl =
-			<   769 /*  100.8 MHz */ >,
-			<  1611 /*  211.2 MHz */ >,     /*Low SVS*/
-			<  2124 /*  278.4 MHz */ >,
-			<  2929 /*  384   MHz */ >,
-			<  3221 /*  422.4 MHz */ >,	/* SVS */
-			<  4248 /*  556.8 MHz */ >,
-			<  5126 /*  672   MHz */ >,
-			<  5859 /*  768   MHz */ >,     /* SVS+  */
-			<  6152 /*  806.4 MHz */ >,
-			<  6445 /*  844.8 MHz */ >,     /* NOM   */
-			<  7104 /*  931.2 MHz */ >;     /* TURBO */
+			< MHZ_TO_MBPS(101, 8) /*  100.8 MHz */ >,
+                        < MHZ_TO_MBPS(211, 8) /*  211.2 MHz */ >,     /*Low SVS*/
+                        < MHZ_TO_MBPS(278, 8) /*  278.4 MHz */ >,
+                        < MHZ_TO_MBPS(385, 8) /*  384   MHz */ >,
+                        < MHZ_TO_MBPS(422, 8) /*  422.4 MHz */ >,     /* SVS */
+                        < MHZ_TO_MBPS(557, 8) /*  556.8 MHz */ >,
+                        < MHZ_TO_MBPS(672, 8) /*  672   MHz */ >,
+                        < MHZ_TO_MBPS(768, 8) /*  768   MHz */ >,     /* SVS+  */
+                        < MHZ_TO_MBPS(806, 8) /*  806.4 MHz */ >,
+                        < MHZ_TO_MBPS(845, 8) /*  844.8 MHz */ >,     /* NOM   */
+                        < MHZ_TO_MBPS(931, 8) /*  931.2 MHz */ >;     /* TURBO */
 	};
 
 	mincpubw: qcom,mincpubw {
@@ -1058,17 +1060,17 @@
 		qcom,src-dst-ports = <1 512>;
 		qcom,active-only;
 		qcom,bw-tbl =
-			<   769 /*  100.8 MHz */ >,
-			<  1611 /*  211.2 MHz */ >,     /*Low SVS*/
-			<  2124 /*  278.4 MHz */ >,
-			<  2929 /*  384   MHz */ >,
-			<  3221 /*  422.4 MHz */ >,	/* SVS */
-			<  4248 /*  556.8 MHz */ >,
-			<  5126 /*  672   MHz */ >,
-			<  5859 /*  768   MHz */ >,     /* SVS+  */
-			<  6152 /*  806.4 MHz */ >,
-			<  6445 /*  844.8 MHz */ >,     /* NOM   */
-			<  7104 /*  931.2 MHz */ >;     /* TURBO */
+			< MHZ_TO_MBPS(101, 8) /*  100.8 MHz */ >,
+                        < MHZ_TO_MBPS(211, 8) /*  211.2 MHz */ >,     /*Low SVS*/
+                        < MHZ_TO_MBPS(278, 8) /*  278.4 MHz */ >,
+                        < MHZ_TO_MBPS(385, 8) /*  384   MHz */ >,
+                        < MHZ_TO_MBPS(422, 8) /*  422.4 MHz */ >,     /* SVS */
+                        < MHZ_TO_MBPS(557, 8) /*  556.8 MHz */ >,
+                        < MHZ_TO_MBPS(672, 8) /*  672   MHz */ >,
+                        < MHZ_TO_MBPS(768, 8) /*  768   MHz */ >,     /* SVS+  */
+                        < MHZ_TO_MBPS(806, 8) /*  806.4 MHz */ >,
+                        < MHZ_TO_MBPS(845, 8) /*  844.8 MHz */ >,     /* NOM   */
+                        < MHZ_TO_MBPS(931, 8) /*  931.2 MHz */ >;     /* TURBO */
 	};
 
 	qcom,cpu-bwmon {
@@ -1084,21 +1086,21 @@
 		cpubw-cpufreq {
 		target-dev = <&cpubw>;
 		cpu-to-dev-map =
-			 <  652800  1611>,
-			 < 1036800  3221>,
-			 < 1401600  5859>,
-			 < 1689600  6445>,
-			 < 1804800  7104>,
-			 < 1958400  7104>,
-			 < 2208000  7104>;
+			 <  652800  MHZ_TO_MBPS(211, 8) >,
+			 < 1036800  MHZ_TO_MBPS(422, 8) >,
+			 < 1401600  MHZ_TO_MBPS(768, 8) >,
+			 < 1689600  MHZ_TO_MBPS(845, 8) >,
+			 < 1804800  MHZ_TO_MBPS(931, 8) >,
+			 < 1958400  MHZ_TO_MBPS(931, 8) >,
+			 < 2208000  MHZ_TO_MBPS(931, 8) >;
 		};
 
 		mincpubw-cpufreq {
 			target-dev = <&mincpubw>;
 			cpu-to-dev-map =
-				<  652800 1611 >,
-				< 1401600 3221 >,
-				< 2208000 5859 >;
+				<  652800 MHZ_TO_MBPS(211, 8) >,
+				< 1401600 MHZ_TO_MBPS(422, 8) >,
+				< 2208000 MHZ_TO_MBPS(768, 8) >;
 		};
 	};
 
@@ -1108,13 +1110,13 @@
 				&CPU4 &CPU5 &CPU6 &CPU7 >;
 		qcom,target-dev = <&cpubw>;
 		qcom,core-dev-table =
-				 <  652800  1611>,
-				 < 1036800  3221>,
-				 < 1401600  5859>,
-				 < 1689600  6445>,
-				 < 1804800  7104>,
-				 < 1958400  7104>,
-				 < 2208000  7104>;
+			 <  652800  MHZ_TO_MBPS(211, 8) >,
+			 < 1036800  MHZ_TO_MBPS(422, 8) >,
+			 < 1401600  MHZ_TO_MBPS(768, 8) >,
+			 < 1689600  MHZ_TO_MBPS(845, 8) >,
+			 < 1804800  MHZ_TO_MBPS(931, 8) >,
+			 < 1958400  MHZ_TO_MBPS(931, 8) >,
+			 < 2208000  MHZ_TO_MBPS(931, 8) >;
 	};
 
 	mincpubw_compute: qcom,mincpubw-compute {
@@ -1123,9 +1125,9 @@
 				&CPU4 &CPU5 &CPU6 &CPU7 >;
 		qcom,target-dev = <&mincpubw>;
 		qcom,core-dev-table =
-				<  652800 1611 >,
-				< 1401600 3221 >,
-				< 2208000 5859 >;
+				<  652800 MHZ_TO_MBPS(211, 8) >,
+				< 1401600 MHZ_TO_MBPS(422, 8) >,
+				< 2208000 MHZ_TO_MBPS(768, 8) >;
 	};
 
 	qcom,ipc-spinlock@1905000 {
