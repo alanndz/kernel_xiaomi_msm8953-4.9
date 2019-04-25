@@ -10,6 +10,9 @@
  * GNU General Public License for more details.
  */
 
+#define MHZ_TO_MBPS(mhz, w) ((mhz * 1000000 * w) / (10240 * 1024))
+#define MHZ_TO_KBPS(mhz, w) ((mhz * 1000000 * w) / (10000))
+
 &soc {
 	pil_gpu: qcom,kgsl-hyp {
 		compatible = "qcom,pil-tz-generic";
@@ -45,16 +48,16 @@
 		qcom,active-only;
 		qcom,bw-tbl =
 			< 0    >, /*  off */
-			< 1611 >, /* 1. DDR:211.20 MHz BIMC: 105.60 MHz */
-			< 2124 >, /* 2. DDR:278.40 MHz BIMC: 139.20 MHz */
-			< 2929 >, /* 3. DDR:384.00 MHz BIMC: 192.00 MHz */
-			< 3222 >, /* 4. DDR:422.40 MHz BIMC: 211.20 MHz */
-			< 4248 >, /* 5. DDR:556.80 MHz BIMC: 278.40 MHz */
-			< 5126 >, /* 6. DDR:672.00 MHz BIMC: 336.00 MHz */
-			< 5859 >, /* 7. DDR:768.00 MHz BIMC: 384.00 MHz */
-			< 6152 >, /* 8. DDR:806.40 MHz BIMC: 403.20 MHz */
-			< 6445 >, /* 9. DDR:844.80 MHz BIMC: 422.40 MHz */
-			< 7104 >; /*10. DDR:931.20 MHz BIMC: 465.60 MHz */
+			< MHZ_TO_MBPS(2112, 8) >, /* 1. 1611 DDR:211.20 MHz BIMC: 105.60 MHz */
+			< MHZ_TO_MBPS(2784, 8) >, /* 2. 2124 DDR:278.40 MHz BIMC: 139.20 MHz */
+			< MHZ_TO_MBPS(3840, 8) >, /* 3. 2929 DDR:384.00 MHz BIMC: 192.00 MHz */
+			< MHZ_TO_MBPS(4224, 8) >, /* 4. 3222 DDR:422.40 MHz BIMC: 211.20 MHz */
+			< MHZ_TO_MBPS(5568, 8) >, /* 5. 4248 DDR:556.80 MHz BIMC: 278.40 MHz */
+			< MHZ_TO_MBPS(6720, 8) >, /* 6. 5126 DDR:672.00 MHz BIMC: 336.00 MHz */
+			< MHZ_TO_MBPS(7680, 8) >, /* 7. 5859 DDR:768.00 MHz BIMC: 384.00 MHz */
+			< MHZ_TO_MBPS(8064, 8) >, /* 8. 6152 DDR:806.40 MHz BIMC: 403.20 MHz */
+			< MHZ_TO_MBPS(8448, 8) >, /* 9. 6445 DDR:844.80 MHz BIMC: 422.40 MHz */
+			< MHZ_TO_MBPS(9312, 8) >; /*10. 7104 DDR:931.20 MHz BIMC: 465.60 MHz */
 	};
 
 	msm_gpu: qcom,kgsl-3d0@1c00000 {
@@ -98,16 +101,16 @@
 		qcom,msm-bus,num-paths = <1>;
 		qcom,msm-bus,vectors-KBps =
 				<26 512 0 0>,	     /*  off          */
-				<26 512 0 1689600>, /* 1. 211.20 MHz */
-				<26 512 0 2227200>, /* 2. 278.40 MHz */
-				<26 512 0 3072000>, /* 3. 384.00 MHz */
-				<26 512 0 3379200>, /* 4.  422.40 MHz */
-				<26 512 0 4454400>, /* 5. 556.80 MHz */
-				<26 512 0 5376000>, /* 6. 672.00 MHz */
-				<26 512 0 6144000>, /* 7. 768.00 MHz */
-				<26 512 0 6451200>, /* 8. 806.40 MHz */
-				<26 512 0 6758400>, /* 9. 844.80 MHz */
-				<26 512 0 7449600>; /*10. 931.20 MHz */
+				<26 512 0 MHZ_TO_KBPS(2112, 8)>, /* 1. 211.20 MHz */
+				<26 512 0 MHZ_TO_KBPS(2784, 8)>, /* 2. 278.40 MHz */
+				<26 512 0 MHZ_TO_KBPS(3840, 8)>, /* 3. 384.00 MHz */
+				<26 512 0 MHZ_TO_KBPS(4224, 8)>, /* 4. 422.40 MHz */
+				<26 512 0 MHZ_TO_KBPS(5568, 8)>, /* 5. 556.80 MHz */
+				<26 512 0 MHZ_TO_KBPS(6720, 8)>, /* 6. 672.00 MHz */
+				<26 512 0 MHZ_TO_KBPS(7680, 8)>, /* 7. 768.00 MHz */
+				<26 512 0 MHZ_TO_KBPS(8064, 8)>, /* 8. 806.40 MHz */
+				<26 512 0 MHZ_TO_KBPS(8448, 8)>, /* 9. 844.80 MHz */
+				<26 512 0 MHZ_TO_KBPS(9312, 8)>; /*10. 931.20 MHz */
 
 		/* GDSC regulator names */
 		regulator-names = "vddcx", "vdd";
