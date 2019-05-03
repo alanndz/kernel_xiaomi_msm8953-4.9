@@ -3017,20 +3017,6 @@ static void sdhci_cmd_irq(struct sdhci_host *host, u32 intmask, u32 *intmask_p)
 			host->mmc->err_stats[MMC_ERR_CMD_CRC]++;
 		}
 
-		if (intmask & SDHCI_INT_AUTO_CMD_ERR) {
-			auto_cmd_status = host->auto_cmd_err_sts;
-			host->mmc->err_stats[MMC_ERR_AUTO_CMD]++;
-			pr_err_ratelimited("%s: %s: AUTO CMD err sts 0x%08x\n",
-				mmc_hostname(host->mmc), __func__, auto_cmd_status);
-			if (auto_cmd_status & (SDHCI_AUTO_CMD12_NOT_EXEC |
-					       SDHCI_AUTO_CMD_INDEX_ERR |
-					       SDHCI_AUTO_CMD_ENDBIT_ERR))
-				host->cmd->error = -EIO;
-			else if (auto_cmd_status & SDHCI_AUTO_CMD_TIMEOUT_ERR)
-				host->cmd->error = -ETIMEDOUT;
-			else if (auto_cmd_status & SDHCI_AUTO_CMD_CRC_ERR)
-				host->cmd->error = -EILSEQ;
-		}
 
 		/* Treat data command CRC error the same as data CRC error */
 		if (host->cmd->data &&
