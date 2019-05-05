@@ -3017,7 +3017,6 @@ static void sdhci_cmd_irq(struct sdhci_host *host, u32 intmask, u32 *intmask_p)
 			host->mmc->err_stats[MMC_ERR_CMD_CRC]++;
 		}
 
-
 		/* Treat data command CRC error the same as data CRC error */
 		if (host->cmd->data &&
 		    (((intmask & (SDHCI_INT_CRC | SDHCI_INT_TIMEOUT)) ==
