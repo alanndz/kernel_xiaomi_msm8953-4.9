@@ -18,10 +18,10 @@
 		status = "okay";
 		pm8953_s1: regulator-s1 {
 			regulator-min-microvolt =
-					<870000>;
+					<RPM_SMD_REGULATOR_LEVEL_RETENTION>;
 			regulator-max-microvolt =
-					<1250000>;
-			qcom,init-voltage = <1100000>;
+					<RPM_SMD_REGULATOR_LEVEL_TURBO>;
+			qcom,use-voltage-level;
 			status = "okay";
 		};
 	};
@@ -401,58 +401,58 @@
 			apc_vreg: regulator {
 				regulator-name = "apc_corner";
 				regulator-min-microvolt = <1>;
-				regulator-max-microvolt = <9>;
+				regulator-max-microvolt = <7>;
 
 				qcom,cpr-fuse-corners = <4>;
 				qcom,cpr-fuse-combos = <64>;
 				qcom,cpr-speed-bins = <8>;
 				qcom,cpr-speed-bin-corners =
-					<9 9 9 9 9 9 9 9>;
+					<7 7 7 7 7 7 7 7>;
 				qcom,cpr-corners =
-					<9 9 9 9 9 9 9 9>;
+					<7 7 7 7 7 7 7 7>;
 
 				qcom,cpr-corner-fmax-map =
-					<1 2 4 9>;
+					<1 2 4 7>;
 
 				qcom,cpr-voltage-ceiling =
 					<715000  790000 860000 865000 920000
-					 990000 1065000 1065000 1065000>;
+					 990000 1065000>;
 
 				qcom,cpr-voltage-floor =
 					<500000  500000 500000 500000 500000
-					 500000  500000 500000 500000>;
+					 500000  500000>;
 
 				qcom,cpr-floor-to-ceiling-max-range =
 					 <    0     0     0     0     0
-					      0     0     0     0>,
+					      0     0>,
 					 <50000 50000 50000 50000 50000
-					  50000 50000 50000 50000>,
+					  50000 50000>,
 					 <50000 50000 50000 50000 50000
-					  50000 50000 50000 50000>,
+					  50000 50000>,
 					 <50000 50000 50000 50000 50000
-					  50000 50000 50000 50000>,
+					  50000 50000>,
 					 <50000 50000 50000 50000 50000
-					  50000 50000 50000 50000>,
+					  50000 50000>,
 					 <50000 50000 50000 50000 50000
-					  50000 50000 50000 50000>,
+					  50000 50000>,
 					 <50000 50000 50000 50000 50000
-					  50000 50000 50000 50000>,
+					  50000 50000>,
 					 <50000 50000 50000 50000 50000
-					  50000 50000 50000 50000>;
+					  50000 50000>;
 
 				qcom,cpr-misc-fuse-voltage-adjustment =
 					<    0     0     0     0      0
-					     0     0     0     0>,
+					     0     0>,
 					<    0     0 30000     0      0
-					     0     0     0     0>;
+					     0     0>;
 
 				qcom,mem-acc-voltage =
-					<1 1 2 2 2 2 2 2 2>;
+					<1 1 2 2 2 2 2>;
 
 				qcom,corner-frequencies =
 					<652800000 1036800000 1401600000
 					1689600000 1804800000 1958400000
-					2016000000 2150400000 2208000000>;
+					2016000000>;
 
 				qcom,cpr-open-loop-voltage-fuse-adjustment =
 					<     0      0      0     0>,
