@@ -286,6 +286,7 @@ static inline void cpu_smt_check_topology(void) { }
 void idle_notifier_register(struct notifier_block *n);
 void idle_notifier_unregister(struct notifier_block *n);
 void idle_notifier_call_chain(unsigned long val);
+
 /*
  * These are used for a global "mitigations=" cmdline option for toggling
  * optional CPU mitigations.
