@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2018, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011-2017, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -68,26 +68,20 @@ int32_t msm_camera_cci_i2c_read_seq(struct msm_camera_i2c_client *client,
 
 	if ((client->addr_type != MSM_CAMERA_I2C_BYTE_ADDR
 		&& client->addr_type != MSM_CAMERA_I2C_WORD_ADDR
-		&& client->addr_type != MSM_CAMERA_I2C_3B_ADDR
-		&& client->addr_type != MSM_CAMERA_I2C_DWORD_ADDR)
+		&& client->addr_type != MSM_CAMERA_I2C_3B_ADDR)
 		|| num_byte == 0)
 		return rc;
 
 	if (num_byte > I2C_REG_DATA_MAX) {
-		S_I2C_DBG("%s: Error num_byte:0x%x exceeds max:0x%x\n",
+		S_I2C_DBG("%s: Error num_byte:0x%x exceeds 8K max supported:0x%x\n",
 		__func__, num_byte, I2C_REG_DATA_MAX);
 		return rc;
 	}
 
-	if (num_byte <= sizeof(buf_onstack)) {
-		buf = buf_onstack;
-		memset(buf, 0, num_byte);
-	} else {
-		buf = kzalloc(num_byte, GFP_KERNEL);
-		if (!buf) {
-			pr_err("%s:%d no memory\n", __func__, __LINE__);
-			return -ENOMEM;
-		}
+	buf = kzalloc(num_byte, GFP_KERNEL);
+	if (!buf) {
+		pr_err("%s:%d no memory\n", __func__, __LINE__);
+		return -ENOMEM;
 	}
 	cci_ctrl.cmd = MSM_CCI_I2C_READ;
 	cci_ctrl.cci_info = client->cci_client;
@@ -171,16 +165,11 @@ int32_t msm_camera_cci_i2c_write_seq(struct msm_camera_i2c_client *client,
 	S_I2C_DBG("%s reg addr = 0x%x num bytes: %d\n",
 		__func__, addr, num_byte);
 
-	if (num_byte <= ARRAY_SIZE(reg_tbl_onstack)) {
-		reg_conf_tbl = reg_tbl_onstack;
-		memset(reg_conf_tbl, 0, num_byte * sizeof(*reg_conf_tbl));
-	} else {
-		reg_conf_tbl = kzalloc(num_byte *
-			(sizeof(struct msm_camera_i2c_reg_array)), GFP_KERNEL);
-		if (!reg_conf_tbl) {
-			pr_err("%s:%d no memory\n", __func__, __LINE__);
-			return -ENOMEM;
-		}
+	reg_conf_tbl = kzalloc(num_byte *
+		(sizeof(struct msm_camera_i2c_reg_array)), GFP_KERNEL);
+	if (!reg_conf_tbl) {
+		pr_err("%s:%d no memory\n", __func__, __LINE__);
+		return -ENOMEM;
 	}
 
 	reg_conf_tbl[0].reg_addr = addr;
@@ -290,7 +279,7 @@ int32_t msm_camera_cci_i2c_write_seq_table(
 
 	if ((write_setting->addr_type != MSM_CAMERA_I2C_BYTE_ADDR
 		&& write_setting->addr_type != MSM_CAMERA_I2C_WORD_ADDR)) {
-		pr_err("%s Invalid addr type %d\n", __func__,
+		pr_err("%s Invalide addr type %d\n", __func__,
 			write_setting->addr_type);
 		return rc;
 	}
@@ -362,7 +351,6 @@ static int32_t msm_camera_cci_i2c_compare(struct msm_camera_i2c_client *client,
 	int32_t rc;
 	uint16_t reg_data = 0;
 	int data_len = 0;
-
 	switch (data_type) {
 	case MSM_CAMERA_I2C_BYTE_DATA:
 	case MSM_CAMERA_I2C_WORD_DATA:
@@ -418,7 +406,6 @@ int32_t msm_camera_cci_i2c_poll(struct msm_camera_i2c_client *client,
 {
 	int32_t rc = -EFAULT;
 	int32_t i = 0;
-
 	S_I2C_DBG("%s: addr: 0x%x data: 0x%x dt: %d\n",
 		__func__, addr, data, data_type);
 
@@ -481,7 +468,6 @@ static int32_t msm_camera_cci_i2c_set_write_mask_data(
 {
 	int32_t rc;
 	uint16_t reg_data;
-
 	CDBG("%s\n", __func__);
 	if (mask == -1)
 		return 0;
@@ -511,10 +497,8 @@ int32_t msm_camera_cci_i2c_write_conf_tbl(
 {
 	int i;
 	int32_t rc = -EFAULT;
-
 	for (i = 0; i < size; i++) {
 		enum msm_camera_i2c_data_type dt;
-
 		if (reg_conf_tbl->cmd_type == MSM_CAMERA_I2C_CMD_POLL) {
 			rc = msm_camera_cci_i2c_poll(client,
 				reg_conf_tbl->reg_addr,
