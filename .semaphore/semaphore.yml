@@ -16,5 +16,5 @@ blocks:
         commands:
           - checkout
           - chmod +x .semaphore/build.sh
-          - bash .semaphore/build.sh rel CAF_LA.UM.7.6.2.r1-08700-89xx.0
+          - bash .semaphore/build.sh
 
