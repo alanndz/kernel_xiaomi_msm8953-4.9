@@ -1467,12 +1467,16 @@ int msm_isp_proc_cmd(struct vfe_device *vfe_dev, void *arg)
 		return -EINVAL;
 	}
 
-	reg_cfg_cmd = kzalloc(sizeof(struct msm_vfe_reg_cfg_cmd)*
-		proc_cmd->num_cfg, GFP_KERNEL);
-	if (!reg_cfg_cmd) {
-		pr_err("%s: reg_cfg alloc failed\n", __func__);
-		rc = -ENOMEM;
-		goto reg_cfg_failed;
+	if (proc_cmd->num_cfg <= ARRAY_SIZE(cfg_cmd_onstack)) {
+		reg_cfg_cmd = cfg_cmd_onstack;
+	} else {
+		reg_cfg_cmd = kmalloc(sizeof(struct msm_vfe_reg_cfg_cmd)*
+			proc_cmd->num_cfg, GFP_KERNEL);
+		if (!reg_cfg_cmd) {
+			pr_err("%s: reg_cfg alloc failed\n", __func__);
+			rc = -ENOMEM;
+			goto reg_cfg_failed;
+		}
 	}
 
 	if (copy_from_user(reg_cfg_cmd,
