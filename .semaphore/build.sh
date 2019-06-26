@@ -37,13 +37,13 @@ fi
 
 export KERNELDIR=$PWD
 export TOOLDIR=$KERNELDIR/.ToolBuild
-export ZIP_DIR="${TOOLDIR}/AnyKernel2"
+export ZIP_DIR="${TOOLDIR}/AnyKernel3"
 export OUTDIR="${KERNELDIR}/.Output"
 export IMAGE="${OUTDIR}/arch/arm64/boot/Image.gz-dtb"
 export BUILDLOG="${OUTDIR}/build.log"
 
 # Download TOOL
-git clone  https://github.com/alanndz/AnyKernel2 -b gcclang ${ZIP_DIR}
+git clone https://github.com/aln-project/AnyKernel3 -b vince ${ZIP_DIR}
 
 if [ $COMP -eq 0 ]; then
 	DIREX=${TOOLDIR}/gcc4.9
