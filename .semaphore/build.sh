@@ -91,7 +91,7 @@ if [ $BREL -eq 0 ]; then
 	fi
 	export ZIP_NAME="${KERNEL_NAME}-${KVERSION}-$(date "+%H%M-%d%m%Y").zip"
 elif [ $BREL -eq 1 ]; then
-	export KVERSION="${KERNEL_VERSION}-Testing"
+	export KVERSION="${KERNEL_VERSION}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
 	export ZIP_NAME="${KERNEL_NAME}-${KVERSION}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
 fi
  
