@@ -92,7 +92,7 @@ if [ $BREL -eq 0 ]; then
 	export ZIP_NAME="${KERNEL_NAME}-${KVERSION}-$(date "+%H%M-%d%m%Y").zip"
 elif [ $BREL -eq 1 ]; then
 	export KVERSION="${KERNEL_VERSION}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M")"
-	export ZIP_NAME="${KERNEL_NAME}-${KVERSION}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
+	export ZIP_NAME="${KERNEL_NAME}-${KERNEL_VERSION}-$(git log --pretty=format:'%h' -1)-$(date "+%H%M").zip"
 fi
  
 COMP_VERSION=$(${CROSS_COMPILE}gcc --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
