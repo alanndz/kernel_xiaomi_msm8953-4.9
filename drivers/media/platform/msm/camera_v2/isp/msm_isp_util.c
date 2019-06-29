@@ -2309,8 +2309,7 @@ int msm_isp_open_node(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
 	memset(&vfe_dev->error_info, 0, sizeof(vfe_dev->error_info));
 	atomic_set(&vfe_dev->error_info.overflow_state, NO_OVERFLOW);
 
-	if (!vfe_used_by_adsp(vfe_dev))
-		vfe_dev->hw_info->vfe_ops.core_ops.clear_status_reg(vfe_dev);
+	vfe_dev->hw_info->vfe_ops.core_ops.clear_status_reg(vfe_dev);
 
 	vfe_dev->vfe_hw_version = msm_camera_io_r(vfe_dev->vfe_base);
 	ISP_DBG("%s: HW Version: 0x%x\n", __func__, vfe_dev->vfe_hw_version);
@@ -2416,10 +2415,8 @@ int msm_isp_close_node(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
 	if (rc <= 0)
 		pr_err("%s: halt timeout rc=%ld\n", __func__, rc);
 
-	if (!vfe_used_by_adsp(vfe_dev)) {
-		vfe_dev->hw_info->vfe_ops.core_ops.
+	vfe_dev->hw_info->vfe_ops.core_ops.
 		update_camif_state(vfe_dev, DISABLE_CAMIF_IMMEDIATELY);
-	}
 	vfe_dev->hw_info->vfe_ops.core_ops.reset_hw(vfe_dev, 0, 0);
 
 	/* after regular hw stop, reduce open cnt */
